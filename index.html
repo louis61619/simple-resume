@@ -3,7 +3,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Untitled</title>
+    <title>markdown to resume</title>
+    <meta
+      name="description"
+      content="is a simple web app to translantion markdown to resume"
+    />
+    <meta name="keywords" content="markdown, resume, web" />
+    <meta name="og:title" content="markdown to resume" />
+    <meta
+      name="og:description"
+      content="is a simple web app to translantion markdown to resume"
+    />
+
     <style>
       html {
         height: 100%;
@@ -65,7 +76,6 @@
         margin-left: 12px;
       }
     </style>
-
     <link rel="stylesheet" href="./preview.css" />
   </head>
 
@@ -79,81 +89,7 @@
     </div>
     <div class="text-preview" id="preview">
       <div class="row row--section">
-        <div class="column column--1-1" id="content">
-          <!-- <h2 id="個人簡介">個人簡介</h2>
-          <ul>
-            <li>能熟練使用 JavaScript、TypeScript 進行頁面開發</li>
-            <li>了解 Vue、React 生態及周邊技術，深入學習過框架的設計與實現</li>
-            <li>熟悉 Nodejs，有一定的服務端開發經驗</li>
-            <li>了解 AWS、GCP 等雲平台的操作以及布署</li>
-          </ul>
-          <h2 id="工作經歷">工作經歷</h2>
-          <h3 id="跨界創新">跨界創新</h3>
-          <p class="pull-right">2021.06 ~</p>
-          <p><strong>工作介紹：</strong></p>
-          <ul>
-            <li>開發結合線下 pos 系統與線上軟體的中小型店家服務平台</li>
-          </ul>
-          <strong>工作內容：</strong>
-          <ul>
-            <li>後台模板開發</li>
-            <li>整合 LINE 登入等等第三方開源 api</li>
-            <li>
-              開發多種類型的線上服務，包含電商零售、線上點餐、外賣、優惠集點...等等
-            </li>
-          </ul>
-          <strong>工作成果：</strong>
-          <ul>
-            <li>提供 200 家以上中小型店家全方位的軟體服務</li>
-            <li>優化原系統的首屏呈現速度並顯著提高效能</li>
-            <li>
-              統一後台項目架構與基礎組件配置，提高前端業務實現效率三成以上
-            </li>
-          </ul>
-          <h3 id="思納捷">思納捷</h3>
-          <p class="pull-right">2020.07 ~ 2021.06</p>
-          <p><strong>工作介紹：</strong></p>
-          <ul>
-            <li>
-              開發對接物聯網裝置端的前端的應用介面，該介面用以實時展示數據、操作實際裝置以及設定外接裝置等等
-            </li>
-          </ul>
-          <strong>工作內容：</strong>
-          <ul>
-            <li>負責對舊有項目進行重構，採用單頁面架構並進行前後端拆分</li>
-            <li>實現對應用內的不同模塊拆分並在構建時進行結合的微應用架構</li>
-            <li>基於 Nodejs 實作對該架構進行自動化的 CLI 工具</li>
-            <li>建構中間層以整合大量裝置回傳的數據並進行緩存</li>
-          </ul>
-          <strong>工作成果：</strong>
-          <ul>
-            <li>
-              導入新技術，提高了原有項目的擴展性，能進行模塊各自獨立布署以對應不同的業務場景
-            </li>
-            <li>
-              作為資策會 AIOT 項目參與台灣對捷克的產業交流，並參與智慧城市展出
-            </li>
-          </ul>
-          <h2 id="個人項目">個人項目</h2>
-          <h3 id="vue3-後台模板">Vue3 後台模板</h3>
-          <p class="pull-right">louis61619.github.io/Vue3-Admin</p>
-          <p></p>
-          <ul>
-            <li>使用 Vue3 建構的通用後台模板，實現以配置進行業務組件的開發</li>
-          </ul>
-          <h3 id="個人博客">個人博客</h3>
-          <p class="pull-right">github.com/louis61619/blog-frontstage</p>
-          <p></p>
-          <ul>
-            <li>使用 Next.js 搭建的部落格，有完整的前後台及資料庫</li>
-          </ul>
-          <h2 id="教育經歷">教育經歷</h2>
-          <ul>
-            <li>華夏科技大學</li>
-          </ul>
-          <p class="pull-right">2013/9~2017/6</p>
-          <p></p> -->
-        </div>
+        <div class="column column--1-1" id="content"></div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -237,16 +173,8 @@ An engineering manager building and leading engineering teams at Apple Inc
         },
       };
 
-      const tokenizer = {
-        // emStrong(src) {
-        //   // console.log(src);
-        //   return false;
-        // },
-      };
-
       marked.use({
         renderer,
-        tokenizer,
       });
 
       const content = document.getElementById("content");
