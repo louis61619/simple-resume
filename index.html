@@ -22,7 +22,7 @@
       body {
         height: 100%;
         display: flex;
-        width: 1200px;
+        width: 1280px;
         overflow: hidden;
         overflow-x: scroll;
       }
@@ -66,6 +66,7 @@
         right: 0;
         top: 0;
         padding: 16px;
+        z-index: 1;
       }
       .tools > * {
         padding: 6px 12px;
@@ -75,13 +76,36 @@
         cursor: pointer;
         margin-left: 12px;
       }
+      .tools .float-text {
+        position: relative;
+      }
+      .tools .float-text:hover .text {
+        display: block;
+      }
+      .tools .float-text .text {
+        display: none;
+        position: absolute;
+        color: #20aaea;
+        background-color: #fff;
+        border: 1px solid #20aaea;
+        top: 120%;
+        right: 0;
+        width: 250px;
+        padding: 6px 12px;
+      }
     </style>
     <link rel="stylesheet" href="./preview.css" />
   </head>
 
   <body>
     <div class="tools">
-      <span onclick="print()"> print </span>
+      <span onclick="print()" class="float-text">
+        print
+        <span class="text">
+          if you want to print this resume, you need unenable headers and
+          footers then enable background graphics.
+        </span>
+      </span>
       <a target="_blank" href="https://github.com/louis61619/simple-resume">
         github
       </a>
