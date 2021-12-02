@@ -1,0 +1,261 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Untitled</title>
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        height: 100%;
+        display: flex;
+        width: 1200px;
+        overflow: hidden;
+        overflow-x: scroll;
+      }
+
+      body > div {
+        padding: 24px;
+      }
+
+      .page-break {
+        margin: 2em -48px;
+        border-bottom: 1px dashed #aaa;
+        border-top: 1px dashed #aaa;
+      }
+      .page-break:before {
+        color: #aaa;
+        content: "Page Break";
+        display: block;
+        text-align: center;
+      }
+      .column.column--1-2 .page-break {
+        margin: 2em -2rem 2em -48px;
+      }
+      .column.column--2-2 .page-break {
+        margin: 2em -48px 2em -2rem;
+      }
+      .text-board {
+        width: 50%;
+        flex: 1;
+        padding-top: 36px;
+      }
+      .text-board > textarea {
+        width: 100%;
+        height: 100%;
+        padding: 16px;
+      }
+      .text-preview {
+        flex: 1;
+      }
+      .tools {
+        position: fixed;
+        right: 0;
+        top: 0;
+        padding: 16px;
+      }
+      .tools > * {
+        padding: 6px 12px;
+        color: #fff;
+        background-color: #20aaea;
+        border: 1px solid #20aaea;
+        cursor: pointer;
+        margin-left: 12px;
+      }
+    </style>
+
+    <link rel="stylesheet" href="./preview.css" />
+  </head>
+
+  <body>
+    <div class="tools">
+      <span onclick="print()"> print </span>
+      <a target="_blank" href="#">github</a>
+    </div>
+    <div class="text-board">
+      <textarea id="text"></textarea>
+    </div>
+    <div class="text-preview" id="preview">
+      <div class="row row--section">
+        <div class="column column--1-1" id="content">
+          <!-- <h2 id="個人簡介">個人簡介</h2>
+          <ul>
+            <li>能熟練使用 JavaScript、TypeScript 進行頁面開發</li>
+            <li>了解 Vue、React 生態及周邊技術，深入學習過框架的設計與實現</li>
+            <li>熟悉 Nodejs，有一定的服務端開發經驗</li>
+            <li>了解 AWS、GCP 等雲平台的操作以及布署</li>
+          </ul>
+          <h2 id="工作經歷">工作經歷</h2>
+          <h3 id="跨界創新">跨界創新</h3>
+          <p class="pull-right">2021.06 ~</p>
+          <p><strong>工作介紹：</strong></p>
+          <ul>
+            <li>開發結合線下 pos 系統與線上軟體的中小型店家服務平台</li>
+          </ul>
+          <strong>工作內容：</strong>
+          <ul>
+            <li>後台模板開發</li>
+            <li>整合 LINE 登入等等第三方開源 api</li>
+            <li>
+              開發多種類型的線上服務，包含電商零售、線上點餐、外賣、優惠集點...等等
+            </li>
+          </ul>
+          <strong>工作成果：</strong>
+          <ul>
+            <li>提供 200 家以上中小型店家全方位的軟體服務</li>
+            <li>優化原系統的首屏呈現速度並顯著提高效能</li>
+            <li>
+              統一後台項目架構與基礎組件配置，提高前端業務實現效率三成以上
+            </li>
+          </ul>
+          <h3 id="思納捷">思納捷</h3>
+          <p class="pull-right">2020.07 ~ 2021.06</p>
+          <p><strong>工作介紹：</strong></p>
+          <ul>
+            <li>
+              開發對接物聯網裝置端的前端的應用介面，該介面用以實時展示數據、操作實際裝置以及設定外接裝置等等
+            </li>
+          </ul>
+          <strong>工作內容：</strong>
+          <ul>
+            <li>負責對舊有項目進行重構，採用單頁面架構並進行前後端拆分</li>
+            <li>實現對應用內的不同模塊拆分並在構建時進行結合的微應用架構</li>
+            <li>基於 Nodejs 實作對該架構進行自動化的 CLI 工具</li>
+            <li>建構中間層以整合大量裝置回傳的數據並進行緩存</li>
+          </ul>
+          <strong>工作成果：</strong>
+          <ul>
+            <li>
+              導入新技術，提高了原有項目的擴展性，能進行模塊各自獨立布署以對應不同的業務場景
+            </li>
+            <li>
+              作為資策會 AIOT 項目參與台灣對捷克的產業交流，並參與智慧城市展出
+            </li>
+          </ul>
+          <h2 id="個人項目">個人項目</h2>
+          <h3 id="vue3-後台模板">Vue3 後台模板</h3>
+          <p class="pull-right">louis61619.github.io/Vue3-Admin</p>
+          <p></p>
+          <ul>
+            <li>使用 Vue3 建構的通用後台模板，實現以配置進行業務組件的開發</li>
+          </ul>
+          <h3 id="個人博客">個人博客</h3>
+          <p class="pull-right">github.com/louis61619/blog-frontstage</p>
+          <p></p>
+          <ul>
+            <li>使用 Next.js 搭建的部落格，有完整的前後台及資料庫</li>
+          </ul>
+          <h2 id="教育經歷">教育經歷</h2>
+          <ul>
+            <li>華夏科技大學</li>
+          </ul>
+          <p class="pull-right">2013/9~2017/6</p>
+          <p></p> -->
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js"
+      integrity="sha512-16cHhHqb1CbkfAWbdF/jgyb/FDZ3SdQacXG8vaOauQrHhpklfptATwMFAc35Cd62CQVN40KDTYo9TIsQhDtMFg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      const text = document.getElementById("text");
+
+      text.value = `# **Kate Miller**
+
+An engineering manager building and leading engineering teams at Apple Inc
+
+## Work Experience
+
+### Apple Inc
+
+->_Copenhagen_
+
+**Engineering Manager**
+->_Jan 2019 to Present_
+
+- Increased engineering staff's operating efficiency by providing structure, operating procedures, engineering tools, guidelines, and handbooks.
+- Contributed to company-wide engineering initiatives
+- Supported the engineering and product teams to achieve a high level of technical quality, reliability, and ease-of-use.
+
+**Backend Engineer, Financial Data**
+->_April 2018 to December 2018_
+
+- Built large-scale (petabyte-size) financial data platform/solution/pipelines using Big Data technologies
+- Worked cross-functionally with many teams: Engineering, Treasury, Finance, Accounting, etc.
+- Worked on systems critical to future operation, with impact over billions of dollars of payments volume.
+- Developed a deep understanding of modern payments and financial technology across many countries.
+
+### Stripe
+
+->_San Francisco, CA_
+
+**Full Stack Engineer**
+-> _September 2016 to March 2018_
+
+- Responsible for developing, maintaining internal web applications
+- Collaborated with technical and business staff in design, development, testing and implementation
+- Set up, managed and monitored systems to ensure business continuity
+
+### Bloomberg
+
+->_New York, NY_
+
+**Software Engineer Intern**
+->_June 2016 to August 2016_
+
+- Worked on Bloomberg's platform to enhance the user experience
+- Proactively participated in the team's weekly meetings and conducted reports on the project's progress
+
+
+## Education
+
+### Carnegie Mellon University
+
+->_2014-2016_
+**Masters of Computer Science**, _Pittsburgh, Pennsylvania_
+
+### The State University of NY
+
+->_2010 - 2014_
+**Bachelor of Engineering**,  _Oswego, New York_
+            `;
+
+      const renderer = {
+        em(text) {
+          return `<p class="pull-right">${text}<p>`;
+        },
+        text(text) {
+          let newHtml = text.replace("-&gt;", "");
+          if (text.match(/-&gt;/)) return "";
+          return text;
+        },
+      };
+
+      const tokenizer = {
+        // emStrong(src) {
+        //   // console.log(src);
+        //   return false;
+        // },
+      };
+
+      marked.use({
+        renderer,
+        tokenizer,
+      });
+
+      const content = document.getElementById("content");
+
+      content.innerHTML = marked.parse(text.value);
+
+      text.addEventListener("input", (e) => {
+        content.innerHTML = marked.parse(e.target.value);
+      });
+    </script>
+  </body>
+</html>
