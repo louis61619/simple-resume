@@ -1,4 +1,5 @@
-const init2 = `# **Kate Miller**
+const init2 = `->![aa3733d8f8f411ebb81cb27ada609f87.jpg](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIuV62_Mtky1qWoIxBXiUsIfwTAMD4a2FUUg&usqp=CAU)
+# **Kate Miller**
 An engineering manager building and leading engineering teams at Apple Inc
 
 ## Work Experience
