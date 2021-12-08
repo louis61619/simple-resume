@@ -126,6 +126,9 @@ hr {
   flex: 50%;
   padding-right: 2rem;
 }
+.row.row--section .column.column--1-1 > *:first-child {
+  margin: 0;
+}
 .row.row--section .column.column--2-2 {
   flex: 50%;
   padding-left: 2rem;
