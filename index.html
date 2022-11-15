@@ -104,6 +104,7 @@
 
   <body>
     <div class="tools">
+      <span>login</span>
       <span onclick="print()" class="float-text">
         print
         <span class="text">
@@ -131,17 +132,14 @@
 
       const description = {
         name: "description",
-        level: "inline", // Is this a block-level or inline-level tokenizer?
+        level: "block", // Is this a block-level or inline-level tokenizer?
         start(src) {
-          // console.log(src.match(/->[^->\n]/)?.index);
           return src.match(/->[^->\n]/)?.index;
         },
         tokenizer(src, tokens) {
-          // console.log(src);
           const rule = /^->\s*(.*)(\n|$)/; // Regex for the complete token
           const match = rule.exec(src);
           if (match) {
-            // console.log(match);
             return {
               // Token to generate
               type: "description", // Should match "name" above
@@ -151,11 +149,10 @@
               // dd: this.lexer.inlineTokens(match[2].trim()), //   any further-nested inline tokens
             };
           }
+          return false
         },
         renderer(token) {
-          return `<p class="pull-right">${this.parser.parseInline(
-            token.dt
-          )}<p>`;
+          return `<p class="pull-right">${this.parser.parseInline(token.dt)}</p>`
         },
       };
 

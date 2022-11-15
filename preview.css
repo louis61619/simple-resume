@@ -188,6 +188,7 @@ ul {
 ul li {
   list-style-type: none;
   position: relative;
+  line-height: 2;
 }
 ul li:before {
   background-color: #20aaea;
@@ -238,5 +239,8 @@ strong {
   body {
     width: 100%;
     overflow: initial;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
   }
 }

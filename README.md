@@ -1,0 +1,1 @@
+封裝一個可以自由將 google cloud 當抽屜的 npm 包
