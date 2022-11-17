@@ -11,6 +11,8 @@
 // included, separated by spaces.
 const SCOPES = "https://www.googleapis.com/auth/drive";
 
+const driveUploadPath = 'https://www.googleapis.com/upload/drive/v3/files';
+
 // TODO(developer): Set to client ID and API key from the Developer Console
 const CLIENT_ID =
   "710599532607-4oos62k4o44hdkcq613rr3pv27fri8ug.apps.googleusercontent.com";
@@ -20,18 +22,20 @@ const API_KEY = "AIzaSyC0sWY2_ra9I7VoX7AbllPiA3fXYPSO6-E";
 const APP_ID = "710599532607";
 
 let tokenClient;
-let accessToken =null;
+let accessToken = localStorage.getItem('accessToken') || null;
 let pickerInited = false;
 let gisInited = false;
-
+let fileId =localStorage.getItem('fileId') || null;
 
 if (accessToken) {
   // document.getElementById("signout_button").style.visibility = "visible";
   document.getElementById("authorize_dialog").style.display = "none";
+  if (fileId) {
+    document.getElementById("folder_dialog").style.display = "none";
+  }
 } else {
   // 初始化
   // document.getElementById("loading").style.display = "none";
-  document.getElementById("authorize_content").style.display = "none";
   document.getElementById("folder_dialog").style.display = "none";
   // document.getElementById("signout_button").style.visibility = "hidden";
 }
@@ -66,6 +70,23 @@ function gisLoaded() {
     scope: SCOPES,
     callback: "", // defined later
   });
+  tokenClient.callback = async (response) => {
+    if (response.error !== undefined) {
+      throw response;
+    }
+    accessToken = response.access_token;
+    localStorage.setItem('accessToken', accessToken)
+    if (fileId) {
+      const res = await gapi.client.drive.files.get({
+        fileId: fileId,
+        // fields: "*",
+        alt: 'media'
+      });
+      text.value = res.body
+      content.innerHTML = marked.parse(res.body);
+    }
+    
+  };
   gisInited = true;
   maybeEnableButtons();
 }
@@ -78,9 +99,46 @@ function maybeEnableButtons() {
     setTimeout(() => {
       document.getElementById("loading").style.display = "none";
     }, 0)
-    
-    document.getElementById("authorize_content").style.display = "block";
   }
+  if (accessToken !== null) {
+    tokenClient.requestAccessToken({ prompt: "" });
+  }
+}
+
+async function newResume() {
+  const fileMetadata = {
+    name: `${new Date().valueOf()}-simple-resume.md`,
+  };
+  // const media = {
+  //   mimeType: 'application/json',
+  //   body: fs.createReadStream('files/config.json'),
+  // };
+  try {
+    const file = await gapi.client.drive.files.create({
+      resource: fileMetadata,
+      // media: media,
+      fields: 'id',
+    });
+    fileId = file.result.id
+    text.value = sample
+    content.innerHTML = marked.parse(sample);
+    localStorage.setItem('fileId', file.result.id);
+    document.getElementById("folder_dialog").style.display = "none";
+  } catch (err) {
+    // TODO(developer) - Handle error
+    throw err;
+  }
+}
+
+async function saveResume() {
+  const file = await gapi.client.request({
+    'path': driveUploadPath + '/' + fileId,
+    'method': 'PATCH',
+    'params': {'uploadType': 'media', 'fields': 'id'},
+    'body': text.value
+  })
+  alert('保存成功')
+  console.log(file)
 }
 
 /**
@@ -99,7 +157,7 @@ function handleAuthClick() {
     // createPicker();
   };
 
-  if (accessToken === null) {
+  if (accessToken!== null) {
     // Prompt the user to select a Google Account and ask for consent to share their data
     // when establishing a new session.
     tokenClient.requestAccessToken({ prompt: "consent" });
@@ -113,12 +171,10 @@ function handleAuthClick() {
  *  Sign out the user upon button click.
  */
 function handleSignoutClick() {
-  if (accessToken) {
-    accessToken = null;
-    google.accounts.oauth2.revoke(accessToken);
-    document.getElementById("content").innerText = "";
-    document.getElementById("signout_button").style.visibility = "hidden";
-  }
+  accessToken = null;
+  google.accounts.oauth2.revoke(accessToken);
+  localStorage.clear()
+  window.location.reload()
 }
 
 /**
@@ -164,7 +220,8 @@ async function pickerCallback(data) {
     window.document.getElementById("folder_dialog").style.display = "none";
     // let text = `Picker response: \n${JSON.stringify(data, null, 2)}\n`;
     const document = data[google.picker.Response.DOCUMENTS][0];
-    const fileId = document[google.picker.Document.ID];
+    fileId = document[google.picker.Document.ID];
+    localStorage.setItem('fileId', fileId)
     const res = await gapi.client.drive.files.get({
       fileId: fileId,
       // fields: "*",
@@ -175,6 +232,7 @@ async function pickerCallback(data) {
     //   null,
     //   2
     // )}\n`;
-    window.document.getElementById("content").innerText = res.body;
+    text.value = res.body
+    content.innerHTML = marked.parse(res.body);
   }
 }

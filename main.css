@@ -1,0 +1,135 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+.main {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 12px;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+}
+.content {
+  display: flex;
+  flex: 1;
+  height: 90%;
+}
+.content > * {
+  padding: 12px;
+}
+.page-break {
+  margin: 2em -48px;
+  border-bottom: 1px dashed #aaa;
+  border-top: 1px dashed #aaa;
+}
+.page-break:before {
+  color: #aaa;
+  content: "Page Break";
+  display: block;
+  text-align: center;
+}
+.column.column--1-2 .page-break {
+  margin: 2em -2rem 2em -48px;
+}
+.column.column--2-2 .page-break {
+  margin: 2em -48px 2em -2rem;
+}
+.text-board {
+  width: 100%;
+  /* padding: 16px; */
+  display: flex;
+  grid-area: sidebar;
+  /* height: 100%; */
+}
+.text-board > textarea {
+  padding: 16px;
+  border: none;
+  box-shadow: 0 0 10px #719ECE;
+  width: 100%;
+}
+textarea:focus {
+  outline: none !important;
+  box-shadow: 0 0 10px #719ECE;
+  border: none;
+}
+.text-preview {
+  width: 100%;
+  display: flex;
+  padding: 20px;
+  overflow: hidden;
+}
+.menu {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.menu > * {
+  padding: 6px 12px;
+  color: #fff;
+  background-color: #0052cc;
+  border: 1px solid #0052cc;
+  cursor: pointer;
+  margin-right: 12px;
+  line-height: 20px;
+}
+.menu .float-text {
+  position: relative;
+}
+.menu .float-text:hover .text {
+  display: block;
+}
+.menu .float-text .text {
+  display: none;
+  position: absolute;
+  color: #0052cc;
+  background-color: #fff;
+  border: 1px solid #0052cc;
+  top: 120%;
+  right: 0;
+  width: 250px;
+  padding: 6px 12px;
+}
+
+.dialog {
+	position:absolute;
+	background:white;
+	line-height:1em;
+	overflow:hidden;
+	padding:30px;
+	border:1px solid #acacac;
+	-webkit-box-shadow:0px 0px 2px 2px #d5d5d5;
+	-moz-box-shadow:0px 0px 2px 2px #d5d5d5;
+	box-shadow:0px 0px 2px 2px #d5d5d5;
+	_filter:progid:DXImageTransform.Microsoft.DropShadow(OffX=2, OffY=2, Color='#d5d5d5', Positive='true');
+	z-index: 2;
+}
+
+.button {
+	color:#ffffff;
+	border: none;
+	padding:4px 10px;
+	font-size:14px;
+	white-space: nowrap;
+	border-radius:3px;
+	background-color:#0052cc;
+	cursor:pointer;
+	transition: background-color 0.1s ease-out;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+.button:hover {
+	background-color:#0065ff;
+}
+.button:active {
+	background-color:#0747a6;
+}

@@ -221,7 +221,7 @@ strong {
 }
 
 @media print {
-  .tools {
+  .menu {
     display: none;
   }
   .text-board {
@@ -243,4 +243,5 @@ strong {
   * {
     -webkit-print-color-adjust: exact !important;
   }
+  /* body { margin: 1.6cm; } */
 }
