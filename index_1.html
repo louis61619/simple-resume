@@ -1,0 +1,172 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>markdown to resume</title>
+    <meta
+      name="description"
+      content="is a simple web app to translantion markdown to resume"
+    />
+    <meta name="keywords" content="markdown, resume, web" />
+    <meta name="og:title" content="markdown to resume" />
+    <meta
+      name="og:description"
+      content="is a simple web app to translantion markdown to resume"
+    />
+
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        height: 100%;
+        display: flex;
+        width: 1280px;
+        overflow: hidden;
+        overflow-x: scroll;
+      }
+
+      body > div {
+        padding: 24px;
+      }
+
+      .page-break {
+        margin: 2em -48px;
+        border-bottom: 1px dashed #aaa;
+        border-top: 1px dashed #aaa;
+      }
+      .page-break:before {
+        color: #aaa;
+        content: "Page Break";
+        display: block;
+        text-align: center;
+      }
+      .column.column--1-2 .page-break {
+        margin: 2em -2rem 2em -48px;
+      }
+      .column.column--2-2 .page-break {
+        margin: 2em -48px 2em -2rem;
+      }
+      .text-board {
+        width: 50%;
+        flex: 1;
+        padding-top: 36px;
+      }
+      .text-board > textarea {
+        width: 100%;
+        height: 100%;
+        padding: 16px;
+      }
+      .text-preview {
+        flex: 1;
+      }
+      .tools {
+        position: fixed;
+        right: 0;
+        top: 0;
+        padding: 16px;
+        z-index: 1;
+        opacity: 0.4;
+        transition: all 0.3s;
+      }
+      .tools:hover {
+        opacity: 1;
+      }
+      .tools > * {
+        padding: 6px 12px;
+        color: #fff;
+        background-color: #20aaea;
+        border: 1px solid #20aaea;
+        cursor: pointer;
+        margin-left: 12px;
+      }
+      .tools .float-text {
+        position: relative;
+      }
+      .tools .float-text:hover .text {
+        display: block;
+      }
+      .tools .float-text .text {
+        display: none;
+        position: absolute;
+        color: #20aaea;
+        background-color: #fff;
+        border: 1px solid #20aaea;
+        top: 120%;
+        right: 0;
+        width: 250px;
+        padding: 6px 12px;
+      }
+    </style>
+    <link rel="stylesheet" href="./preview.css" />
+  </head>
+
+  <body>
+    <div class="tools">
+      <span>login</span>
+      <span onclick="print()" class="float-text">
+        print
+        <span class="text">
+          if you want to print this resume, you need unenable headers and
+          footers then enable background graphics.
+        </span>
+      </span>
+      <a target="_blank" href="https://github.com/louis61619/simple-resume">
+        github
+      </a>
+    </div>
+    <div class="text-board">
+      <textarea id="text"></textarea>
+    </div>
+    <div class="text-preview" id="preview">
+      <div class="row row--section">
+        <div class="column column--1-1" id="content"></div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="./init.js"></script>
+    <script>
+      const text = document.getElementById("text");
+      text.value = init2;
+
+      const description = {
+        name: "description",
+        level: "block", // Is this a block-level or inline-level tokenizer?
+        start(src) {
+          return src.match(/->[^->\n]/)?.index;
+        },
+        tokenizer(src, tokens) {
+          const rule = /^->\s*(.*)(\n|$)/; // Regex for the complete token
+          const match = rule.exec(src);
+          if (match) {
+            return {
+              // Token to generate
+              type: "description", // Should match "name" above
+              raw: match[0], // Text to consume from the source
+              dt: this.lexer.inlineTokens(match[1].trim()),
+              // dt: this.lexer.inlineTokens(match[1].trim()), // Additional custom properties, including
+              // dd: this.lexer.inlineTokens(match[2].trim()), //   any further-nested inline tokens
+            };
+          }
+          return false
+        },
+        renderer(token) {
+          return `<p class="pull-right">${this.parser.parseInline(token.dt)}</p>`
+        },
+      };
+
+      marked.use({
+        extensions: [description],
+      });
+
+      const content = document.getElementById("content");
+
+      content.innerHTML = marked.parse(text.value);
+
+      text.addEventListener("input", (e) => {
+        content.innerHTML = marked.parse(e.target.value);
+      });
+    </script>
+  </body>
+</html>
