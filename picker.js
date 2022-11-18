@@ -26,9 +26,9 @@ let fileId =localStorage.getItem('fileId') || null;
 
 if (accessToken) {
   // document.getElementById("signout_button").style.visibility = "visible";
-  document.getElementById("authorize_dialog").style.display = "none";
+  // document.getElementById("authorize_dialog").style.display = "none";
   document.getElementById("new_dialog").style.display = "none";
-  document.getElementById("dialog_bg").style.display = "none";
+  // document.getElementById("dialog_bg").style.display = "none";
   if (fileId) {
     document.getElementById("folder_dialog").style.display = "none";
   }
@@ -70,28 +70,14 @@ function gisLoaded() {
     scope: SCOPES,
     callback: "", // defined later
   });
-  tokenClient.callback = async (response) => {
-    if (response.error !== undefined) {
-      throw response;
-    }
-    accessToken = response.access_token;
-    localStorage.setItem('accessToken', accessToken)
-    if (fileId) {
-      gapi.client.drive.files.get({
-        fileId: fileId,
-        // fields: "*",
-        alt: 'media'
-      }).then(res => {
-        text.value = res.body
-        content.innerHTML = marked.parse(res.body);
-      });
-      getFileDescription(fileId).then(res => {
-        document.getElementById('resume_name').value = res.name.replace(/\.md$/, '')
-      })
-
-    }
+  // tokenClient.callback = async (response) => {
+  //   if (response.error !== undefined) {
+  //     throw response;
+  //   }
+  //   accessToken = response.access_token;
+  //   localStorage.setItem('accessToken', accessToken)
     
-  };
+  // };
   gisInited = true;
   maybeEnableButtons();
 }
@@ -116,9 +102,9 @@ function maybeEnableButtons() {
       document.getElementById("loading").style.display = "none";
     }, 0)
   }
-  if (accessToken !== null) {
-    tokenClient.requestAccessToken({ prompt: "" });
-  }
+  // if (accessToken !== null) {
+  //   tokenClient.requestAccessToken({ prompt: "" });
+  // }
 }
 
 async function newResume() {
@@ -199,15 +185,31 @@ function handleAuthClick() {
     if (response.error !== undefined) {
       throw response;
     }
+    console.log(response)
     accessToken = response.access_token;
     localStorage.setItem('accessToken', accessToken)
-    document.getElementById("signout_button").style.visibility = "visible";
     document.getElementById("authorize_dialog").style.display = "none";
-    document.getElementById("folder_dialog").style.display = "block";
+    document.getElementById("dialog_bg").style.display = "none";
+
+    if (fileId) {
+      gapi.client.drive.files.get({
+        fileId: fileId,
+        // fields: "*",
+        alt: 'media'
+      }).then(res => {
+        text.value = res.body
+        content.innerHTML = marked.parse(res.body);
+      });
+      getFileDescription(fileId).then(res => {
+        document.getElementById('resume_name').value = res.name.replace(/\.md$/, '')
+      })
+    } else {
+      document.getElementById("folder_dialog").style.display = "block";
+    }
     // createPicker();
   };
 
-  if (accessToken!== null) {
+  if (accessToken === null) {
     // Prompt the user to select a Google Account and ask for consent to share their data
     // when establishing a new session.
     tokenClient.requestAccessToken({ prompt: "consent" });
