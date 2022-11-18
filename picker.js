@@ -115,7 +115,6 @@ async function newResume() {
   };
   try {
     let str = '';
-    console.log(document.getElementById('with_template').checked)
     if (document.getElementById('with_template').checked) {
       str = sample
     }
@@ -189,9 +188,9 @@ function handleAuthClick() {
     accessToken = response.access_token;
     localStorage.setItem('accessToken', accessToken)
     document.getElementById("authorize_dialog").style.display = "none";
-    document.getElementById("dialog_bg").style.display = "none";
-
+    
     if (fileId) {
+      document.getElementById("dialog_bg").style.display = "none";
       gapi.client.drive.files.get({
         fileId: fileId,
         // fields: "*",
