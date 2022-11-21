@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Resume</title>
+  <link rel="stylesheet" href="./preview.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    .text-preview {
+      max-width: 600px;
+      margin: 24px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="text-preview" id="preview">
+    <div class="row row--section">
+      <div class="column column--1-1" id="content"></div>
+    </div>
+  </div>
+  <script src="./editor.js"></script>
+  <script>
+    const API_KEY = "AIzaSyC0sWY2_ra9I7VoX7AbllPiA3fXYPSO6-E";
+    
+    const params = new URLSearchParams(window.location.search);
+    const fileId = params.get("fileId")
+    console.log(fileId)
+
+    const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`
+
+    const obj = {}
+    const { aaa, bbb } = obj
+
+    fetch(url).then(res => {
+      // return res.json()
+      return res?.body || res
+    }).then(res => {
+      const reader = res.getReader();
+      let stash = ''
+      reader.read().then(function processText({ done, value }){
+        console.log(value, done)
+        if (done) {
+          // const resume = new TextDecoder().decode(stash)
+          window.document.getElementById('content').innerHTML = marked.parse(stash);
+          return
+        }
+        stash += new TextDecoder().decode(value)
+        return reader.read().then(processText);
+      })
+    })
+  </script>
+</body>
+</html>

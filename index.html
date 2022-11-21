@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Picker API Quickstart</title>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Resume</title>
     <link rel="stylesheet" href="./main.css" />
     <link rel="stylesheet" href="./preview.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -212,7 +214,8 @@
           </span> -->
         </button>
         <button onclick="saveResume()" class="button">保存</button>
-        <button onclick="publishResume()" class="button">發布</button>
+        <button onclick="publishResume()" class="button" id="publish_button">發布</button>
+        <button onclick="openPublicURL()" style="display: none;" class="button" id="open_url_button">獲取發布連結</button>
         <button onclick="createPicker()" class="button">打開現有簡歷</button>
         <button onclick="createNewDialog()" class="button">創建新簡歷</button>
         <button

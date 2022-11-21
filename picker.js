@@ -23,6 +23,7 @@ let accessToken = localStorage.getItem('accessToken') || null;
 let pickerInited = false;
 let gisInited = false;
 let fileId =localStorage.getItem('fileId') || null;
+let isPublish = false;
 
 if (accessToken) {
   // document.getElementById("signout_button").style.visibility = "visible";
@@ -86,9 +87,18 @@ async function getFileDescription (driveId) {
   return new Promise( (resolve, reject) => {
     gapi.client.drive.files.get({
       'fileId': driveId,
-      'fields': 'id,version,name,appProperties',
+      'fields': 'id,version,name,appProperties,permissions',
     }).execute(
-      (response) => resolve(response)
+      (response) => {
+        if(response.permissions?.length) {
+          if (response.permissions.find(x => x.id === 'anyoneWithLink')) {
+            isPublish = true
+            window.document.getElementById('publish_button').innerHTML = '取消發布';
+            document.getElementById('open_url_button').style.display = 'block';
+          }
+        }
+        resolve(response)
+      }
     );
   });
 }
@@ -123,6 +133,7 @@ async function newResume() {
     
     document.getElementById("new_dialog").style.display = "none";
     document.getElementById("dialog_bg").style.display = "none";
+    document.getElementById("folder_dialog").style.display = "none";
 
     const file = await gapi.client.drive.files.create({
       resource: fileMetadata,
@@ -184,7 +195,6 @@ function handleAuthClick() {
     if (response.error !== undefined) {
       throw response;
     }
-    console.log(response)
     accessToken = response.access_token;
     localStorage.setItem('accessToken', accessToken)
     document.getElementById("authorize_dialog").style.display = "none";
@@ -243,8 +253,6 @@ function createPicker() {
   const docsView3 = new google.picker.DocsView(google.picker.ViewId.DOCS).
       setStarred(true)
 
-  // console.log(view)
-  // view.setMimeTypes('*');
   const picker = new google.picker.PickerBuilder()
     // .enableFeature(google.picker.Feature.NAV_HIDDEN)
     .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
@@ -295,4 +303,36 @@ async function pickerCallback(data) {
 
 function closeDialog(el) {
   el.parentElement.style.display = 'none'
+}
+
+function openPublicURL() {
+  window.open(`/publish.html?fileId=${fileId}`)
+}
+
+async function publishResume() {
+  if (!isPublish) {
+    isPublish = true
+    document.getElementById('publish_button').innerHTML = '取消發布'
+    document.getElementById('open_url_button').style.display = 'block';
+    const res = await gapi.client.request({
+      'path': 'https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions',
+      'method': 'POST',
+      'body': {
+        "role": "reader",
+        "type": "anyone",
+       },
+    })
+    openPublicURL()
+  } else {
+    isPublish = false
+    document.getElementById('publish_button').innerHTML = '發布';
+    document.getElementById('open_url_button').style.display = 'none';
+    const res = await gapi.client.request({
+      'path': 'https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions/anyoneWithLink',
+      'method': 'delete',
+    })
+    alert('取消成功')
+  }
+  
+  // console.log(res)
 }

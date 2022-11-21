@@ -1,5 +1,6 @@
 const text = document.getElementById("text");
-text.value = ''
+// console.log(text)
+if (text) text.value = ''
 
 const description = {
   name: "description",
@@ -33,8 +34,11 @@ marked.use({
 
 const content = document.getElementById("content");
 
-content.innerHTML = marked.parse(text.value);
+if (text) {
+  content.innerHTML = marked.parse(text.value);
+  text.addEventListener("input", (e) => {
+    content.innerHTML = marked.parse(e.target.value);
+  });
+}
 
-text.addEventListener("input", (e) => {
-  content.innerHTML = marked.parse(e.target.value);
-});
+
