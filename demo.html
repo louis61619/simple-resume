@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Resume</title>
+    <meta name="description" content="使用 markdown 語法快速創建簡歷的網站">
+    <meta name="keywords" content="markdown, resume, simple resume">
+    <meta name="author" content="louis61619">
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./preview.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="./sample.js"></script>
+  </head>
+  <body>
+
+    <div class="main">
+      <div class="menu">
+        <button onclick="print()" class="button" style="margin-left: auto;">
+          打印
+          <!-- <span class="text">
+            if you want to print this resume, you need unenable headers and
+            footers then enable background graphics.
+          </span> -->
+        </button>
+        <button
+          id="signout_button"
+          class="button"
+          onclick="window.location.href = '/'"
+        >
+          在 google drive 中保存
+        </button>
+      </div>
+      <div class="content">
+        <div class="text-board">
+          <textarea id="text"></textarea>
+        </div>
+        <div class="text-preview" id="preview">
+          <div class="row row--section">
+            <div class="column column--1-1" id="content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./editor.js"></script>
+    <script>
+      text.value = sample
+      content.innerHTML = marked.parse(text.value);
+    </script>
+  </body>
+</html>
