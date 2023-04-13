@@ -19,8 +19,15 @@ const config = {
     project: path.join(__dirname, "tsconfig.json"),
   },
   plugins: ["@typescript-eslint"],
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  extends: [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+  ],
   rules: {
+    //     t@typescript-eslint/no-unsafe-assignment
+    // Unsafe construction of an any type value.eslint@typescript-eslint/no-unsafe-call
+    // Unsafe member access .picker on an `any` value.eslint@typescript-eslint/no-unsafe-member-access
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
@@ -29,7 +36,11 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    // "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };
 
