@@ -3,6 +3,7 @@ import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
+  type TokenSet,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -18,17 +19,22 @@ import { prisma } from "~/server/db";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     accessToken: string;
+    error?: "RefreshAccessTokenError";
     user: {
       id: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
+}
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+declare module "next-auth/jwt" {
+  interface JWT {
+    access_token?: string;
+    expires_at: number;
+    refresh_token: string;
+    error?: "RefreshAccessTokenError";
+  }
 }
 
 /**
@@ -39,38 +45,89 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   secret: "djieowjdowe",
   callbacks: {
-    jwt({ token, account }) {
-      // Persist the OAuth access_token to the token right after signin
+    // jwt({ token, account }) {
+    //   // Persist the OAuth access_token to the token right after signin
+    //   if (account) {
+    //     token.accessToken = account.access_token;
+    //   }
+    //   return token;
+    // },
+    // session: ({ session, token }) => {
+    //   // console.log(token.accessToken, "token");
+    //   // session.accessToken = token.accessToken
+    //   return {
+    //     ...session,
+    //     accessToken: token.accessToken,
+    //     user: {
+    //       ...session.user,
+    //       // id: user.id,
+    //     },
+    //   };
+    // },
+    async jwt({ token, account }) {
       if (account) {
-        token.accessToken = account.access_token;
+        return {
+          ...token,
+          access_token: account.access_token,
+          expires_at: Math.floor(
+            Date.now() / 1000 + (account.expires_in as number)
+          ),
+          refresh_token: account.refresh_token,
+        } as typeof token;
+      } else if (Date.now() < token.expires_at * 1000) {
+        // If the access token has not expired yet, return it
+        return token;
+      } else {
+        // If the access token has expired, try to refresh it
+        try {
+          // https://accounts.google.com/.well-known/openid-configuration
+          // We need the `token_endpoint`.
+          const response = await fetch("https://oauth2.googleapis.com/token", {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              client_id: env.GOOGLE_CLIENT_ID,
+              client_secret: env.GOOGLE_CLIENT_SECRET,
+              grant_type: "refresh_token",
+              refresh_token: token.refresh_token,
+            }),
+            method: "POST",
+          });
+
+          const tokens = (await response.json()) as TokenSet;
+
+          if (!response.ok) throw tokens;
+
+          return {
+            ...token, // Keep the previous token properties
+            access_token: tokens.access_token,
+            expires_at: Math.floor(
+              Date.now() / 1000 + (tokens.expires_in as number)
+            ),
+            // Fall back to old refresh token, but note that
+            // many providers may only allow using a refresh token once.
+            refresh_token: tokens.refresh_token ?? token.refresh_token,
+          };
+        } catch (error) {
+          console.error("Error refreshing access token", error);
+          // The error property will be used client-side to handle the refresh token error
+          return { ...token, error: "RefreshAccessTokenError" as const };
+        }
       }
-      return token;
     },
-    session: ({ session, token }) => {
-      // console.log(token.accessToken, "token");
-      // session.accessToken = token.accessToken
+    session({ session, token }) {
+      // session.accessToken = token.access_token || "";
+      // session.error = token.error;
+      // return session;
       return {
         ...session,
-        accessToken: token.accessToken,
+        accessToken: token.access_token,
+        error: token.error,
         user: {
           ...session.user,
           // id: user.id,
         },
       };
     },
-    // jwt({ token, account }) {
-    //   if (account?.accessToken) {
-    //     token.accessToken = account.accessToken;
-    //   }
-    //   return token;
-    // },
-    // jwt({ token, account }) {
-    //   // Persist the OAuth access_token to the token right after signin
-    //   if (account) {
-    //     token.accessToken = account.access_token
-    //   }
-    //   return token
-    // },
   },
   // 和 prisma 集成使用資料庫紀錄用戶資料
   // adapter: PrismaAdapter(prisma),

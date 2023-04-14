@@ -3,17 +3,17 @@ const path = require("path");
 
 /** @type {import("eslint").Linter.Config} */
 const config = {
-  overrides: [
-    {
-      extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-      ],
-      files: ["*.ts", "*.tsx"],
-      parserOptions: {
-        project: path.join(__dirname, "tsconfig.json"),
-      },
-    },
-  ],
+  // overrides: [
+  //   {
+  //     extends: [
+  //       "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  //     ],
+  //     files: ["*.ts", "*.tsx"],
+  //     parserOptions: {
+  //       project: path.join(__dirname, "tsconfig.json"),
+  //     },
+  //   },
+  // ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
@@ -40,7 +40,7 @@ const config = {
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    // "@typescript-eslint/no-explicit-any": "off",
   },
 };
 

@@ -7,28 +7,35 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import { useState } from "react";
-
-function gapiLoaded() {
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  gapi.load("client:picker", intializePicker);
-}
-
-async function intializePicker() {
-  await gapi.client.load(
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-  );
-}
+import { Loading } from "~/components/loading";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const [laoding, setLoading] = useState();
+  const [laoding, setLoading] = useState(() => {
+    if (typeof window !== "undefined" && window?.gapi && (gapi as any).picker) {
+      return false;
+    }
+    return true;
+  });
+
+  function gapiLoaded() {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    gapi.load("client:picker", intializePicker);
+  }
+
+  async function intializePicker() {
+    await gapi.client.load(
+      "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+    );
+    setLoading(false);
+  }
 
   return (
     <>
       <SessionProvider session={session}>
-        <Component {...pageProps} />
+        {laoding ? <Loading /> : <Component {...pageProps} />}
       </SessionProvider>
       <Script
         async
