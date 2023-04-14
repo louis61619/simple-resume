@@ -21,7 +21,7 @@ const Preview = ({ children, ...props }: { children: React.ReactNode }) => {
   }, [contentRef]);
 
   return (
-    <iframe {...props} ref={setContentRef}>
+    <iframe className="w-1/2" {...props} ref={setContentRef}>
       {mountNode && createPortal(children, mountNode)}
     </iframe>
   );

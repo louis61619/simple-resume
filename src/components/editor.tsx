@@ -81,68 +81,54 @@ marked.use({
       </div>
     </div> */
 }
+const initStr = `
+# John Doe
 
-const initStr = `->![aa3733d8f8f411ebb81cb27ada609f87.jpg](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIuV62_Mtky1qWoIxBXiUsIfwTAMD4a2FUUg&usqp=CAU)
-# **Kate Miller**
-An engineering manager building and leading engineering teams at Apple Inc
+## Summary
 
-## Work Experience
+Experienced software developer with expertise in full-stack web development and a passion for creating elegant solutions to complex problems.
 
-### Apple Inc
-->_Copenhagen_
+## Skills
 
-**Engineering Manager**
-->_Jan 2019 to Present_
+- Languages: JavaScript, Python, Java, Ruby
+- Front-end: React, Vue.js, jQuery, HTML5/CSS3
+- Back-end: Node.js, Django, Flask, Spring
+- Databases: MySQL, MongoDB, PostgreSQL, Redis
+- Tools: Git, JIRA, Agile, Scrum
 
-- Increased engineering staff's operating efficiency by providing structure, operating procedures, engineering tools, guidelines, and handbooks.
-- Contributed to company-wide engineering initiatives
-- Supported the engineering and product teams to achieve a high level of technical quality, reliability, and ease-of-use.
+## Professional Experience
 
-**Backend Engineer, Financial Data**
-->_April 2018 to December 2018_
+### Software Developer, Acme Inc.
 
-- Built large-scale (petabyte-size) financial data platform/solution/pipelines using Big Data technologies
-- Worked cross-functionally with many teams: Engineering, Treasury, Finance, Accounting, etc.
-- Worked on systems critical to future operation, with impact over billions of dollars of payments volume.
-- Developed a deep understanding of modern payments and financial technology across many countries.
+->_2019 - present_
 
-### Stripe
-->_San Francisco, CA_
+- Developed and maintained web applications using React and Node.js
+- Led a team of developers in building a new platform from scratch
+- Improved application performance and user experience through optimization and refactoring
+- Utilized Agile methodology and JIRA for project management
 
-**Full Stack Engineer**
--> _September 2016 to March 2018_
+### Web Developer, XYZ Corp.
 
-- Responsible for developing, maintaining internal web applications
-- Collaborated with technical and business staff in design, development, testing and implementation
-- Set up, managed and monitored systems to ensure business continuity
+->_2017 - 2019_
 
-### Bloomberg
-->_New York, NY_
-
-**Software Engineer Intern**
-->_June 2016 to August 2016_
-
-- Worked on Bloomberg's platform to enhance the user experience
-- Proactively participated in the team's weekly meetings and conducted reports on the project's progress
-
+- Built and maintained e-commerce websites using Vue.js and Django
+- Developed custom themes and plugins for WordPress sites
+- Optimized websites for speed and search engine rankings
+- Managed multiple projects simultaneously using Scrum methodology
 
 ## Education
 
-### Carnegie Mellon University
-->_2014-2016_
-**Masters of Computer Science**, _Pittsburgh, Pennsylvania_
+### Bachelor of Science in Computer Science
 
-### The State University of NY
-->_2010 - 2014_
-**Bachelor of Engineering**,  _Oswego, New York_
+University of California, Los Angeles
+
+->_2013 - 2017dwdw_
 
 `;
-
-console.log(marked);
-
 const Editor: React.FC = () => {
   const [value, setValue] = useState(initStr || "");
 
+  /* @refresh reset */
   const html = useMemo(() => {
     return marked.parse(value);
   }, [value]);
@@ -163,11 +149,20 @@ const Editor: React.FC = () => {
       </div> */}
       <Preview>
         <div
-          className="column column--1-1"
+          className="text-preview"
           dangerouslySetInnerHTML={{
             __html: html,
           }}
-        ></div>
+        >
+          {/* <div className="row row--section">
+            <div
+              className="column column--1-1"
+              dangerouslySetInnerHTML={{
+                __html: html,
+              }}
+            ></div> */}
+          {/* <div></div> */}
+        </div>
       </Preview>
     </div>
   );
