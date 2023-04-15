@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { marked } from "marked";
 import { Preview } from "./preview";
+import { useResume } from "~/hook/useResume";
 
 const description: marked.TokenizerAndRendererExtension = {
   name: "description",
@@ -33,54 +34,6 @@ marked.use({
   extensions: [description],
 });
 
-{
-  /* <div class="main">
-      <div class="menu">
-        <span style="line-height: 32px; margin-right: auto;">
-          簡歷名稱：
-          <input
-            id="resume_name"
-            style="
-              height: 24px;
-              width: 155px;
-              padding: 0 8px;
-              margin-right: 24px;
-            "
-            type="text"
-          />
-        </span>
-        <button onclick="print()" class="button">
-          打印
-          <!-- <span class="text">
-            if you want to print this resume, you need unenable headers and
-            footers then enable background graphics.
-          </span> -->
-        </button>
-        <button onclick="saveResume()" class="button">保存</button>
-        <button onclick="publishResume()" class="button" id="publish_button">發布</button>
-        <button onclick="openPublicURL()" style="display: none;" class="button" id="open_url_button">獲取發布連結</button>
-        <button onclick="createPicker()" class="button">打開現有簡歷</button>
-        <button onclick="createNewDialog()" class="button">創建新簡歷</button>
-        <button
-          id="signout_button"
-          class="button"
-          onclick="handleSignoutClick()"
-        >
-          登出
-        </button>
-      </div>
-      <div class="content">
-        <div class="text-board">
-          <textarea id="text"></textarea>
-        </div>
-        <div class="text-preview" id="preview">
-          <div class="row row--section">
-            <div class="column column--1-1" id="content"></div>
-          </div>
-        </div>
-      </div>
-    </div> */
-}
 const initStr = `
 # John Doe
 
@@ -125,28 +78,28 @@ University of California, Los Angeles
 ->_2013 - 2017dwdw_
 
 `;
-const Editor: React.FC = () => {
-  const [value, setValue] = useState(initStr || "");
+const Editor: React.FC<
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+> = ({ ...props }) => {
+  const { content, dispatch } = useResume();
 
   /* @refresh reset */
   const html = useMemo(() => {
-    return marked.parse(value);
-  }, [value]);
+    return marked.parse(content);
+  }, [content]);
 
   return (
-    <div className="flex h-full w-full">
+    <div {...props}>
       <div className="h-full w-1/2">
         <textarea
-          className="h-full w-full p-4 shadow-md outline-none"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          className="h-full w-full p-4 text-sm shadow-md outline-none"
+          value={content}
+          onChange={(e) =>
+            dispatch({ type: "SET_CONTENT", payload: e.target.value })
+          }
         ></textarea>
       </div>
-      {/* <div className="text-preview" id="preview">
-        <div className="row row--section">
-          <div className="column column--1-1" id="content"></div>
-        </div>
-      </div> */}
+
       <Preview>
         <div
           className="text-preview"

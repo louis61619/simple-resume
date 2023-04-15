@@ -6,7 +6,7 @@
   padding: 0;
 }
 html {
-  font-size: 8px;
+  font-size: 10px;
 }
 body {
   color: #222;
@@ -18,7 +18,7 @@ body {
   margin: auto;
 }
 .text-preview {
-  height: 100%;
+  /* height: 100%; */
   padding: 20px;
   overflow: hidden;
 }
@@ -202,7 +202,8 @@ ul li:before {
   left: -16px;
   margin-left: 0.28284em;
   position: absolute;
-  top: 0.56716em;
+  top: 0.86716em;
+  /* top: 0.56716em; */
   transform: rotate(45deg);
   width: 0.4em;
 }

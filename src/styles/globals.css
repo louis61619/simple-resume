@@ -8,7 +8,7 @@
     color: theme('colors.white');
     border: none;
     padding: 4px 10px;
-    font-size: 14px;
+    font-size: theme('fontSize.sm');
     white-space: nowrap;
     border-radius: 3px;
     background-color:#0052cc;
@@ -22,6 +22,9 @@
   }
   .btn:active {
     background-color:#0747a6;
+  }
+  .btn:not(:last-of-type) {
+    margin-right: 8px;
   }
 }
 

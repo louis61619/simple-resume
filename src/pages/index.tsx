@@ -17,41 +17,11 @@ import { api } from "~/utils/api";
 import { Dialog } from "~/components/dialog";
 import { useEffect, useState } from "react";
 import { getToken } from "next-auth/jwt";
-import { env } from "~/env.mjs";
 import { Button } from "~/components/button";
 import { Editor } from "~/components/editor";
-
-const API_KEY = env.NEXT_PUBLIC_GOOGLE_API_KEY;
-const APP_ID = env.NEXT_PUBLIC_GOOGLE_APP_ID;
-
-function createPicker(accessToken: string) {
-  const docsView1 = new google.picker.DocsView(google.picker.ViewId.DOCS)
-    .setIncludeFolders(true)
-    .setOwnedByMe(true);
-  // .setEnableDrives(true);
-  const docsView2 = new google.picker.DocsView(google.picker.ViewId.DOCS)
-    .setIncludeFolders(true)
-    .setOwnedByMe(false);
-  const docsView3 = new google.picker.DocsView(
-    google.picker.ViewId.DOCS
-  ).setStarred(true);
-
-  const picker = new google.picker.PickerBuilder()
-    // .enableFeature(google.picker.Feature.NAV_HIDDEN)
-    .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-    .setDeveloperKey(API_KEY)
-    .setAppId(APP_ID)
-    .setOAuthToken(accessToken)
-    // .addView(view)
-    .addView(docsView1)
-    .addView(docsView2)
-    .addView(docsView3)
-    .addView(google.picker.ViewId.RECENTLY_PICKED)
-    .addView(new google.picker.DocsUploadView())
-    // .setCallback(pickerCallback)
-    .build();
-  picker.setVisible(true);
-}
+import { Tools } from "~/components/tools";
+import { createPicker } from "~/utils/picker";
+import { ResumeContextProvider } from "~/hook/useResume";
 
 export const getServerSideProps = async () => {
   const providers = await getProviders();
@@ -75,29 +45,35 @@ const Home: NextPage<PageProps> = ({ providers }) => {
         <meta name="description" content="create resume by markdown" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="p-3">
-        {/* <AuthShowcase /> */}
-        <Editor />
-        <Dialog
-          open={showAuthDialog}
-          onClose={() => {
-            setShowAuthDialog(false);
-          }}
-        >
-          <div className="h-full text-center">
-            <p className="text-2xl text-gray-500">Authorization required</p>
-            <p className="p-4 text-base">Authorize this app in Google Drive:</p>
-            <Button
-              onClick={() => {
-                signIn(providers?.google.id);
-              }}
-              className="p-3 text-lg"
-            >
-              Authorize
-            </Button>
-          </div>
-        </Dialog>
+      <div id="root"></div>
+      <main className="flex flex-col p-3">
+        <ResumeContextProvider>
+          <Tools
+            openSignInDialog={() => setShowAuthDialog(true)}
+            className="mb-1 flex"
+          />
+          <Editor className="flex flex-1" />
+        </ResumeContextProvider>
       </main>
+      <Dialog
+        open={showAuthDialog}
+        onClose={() => {
+          setShowAuthDialog(false);
+        }}
+      >
+        <div className="h-full text-center">
+          <p className="text-2xl text-gray-500">Authorization required</p>
+          <p className="p-4 text-base">Authorize this app in Google Drive:</p>
+          <Button
+            onClick={() => {
+              signIn(providers?.google.id);
+            }}
+            className="p-3 text-lg"
+          >
+            Authorize
+          </Button>
+        </div>
+      </Dialog>
     </>
   );
 };

@@ -7,8 +7,8 @@ const Dialog: React.FC<{
   open?: boolean;
   onClose?: () => void;
 }> = ({
-  height = 210,
-  width = 360,
+  // height = 210,
+  // width = 360,
   children,
   open = true,
   onClose,
@@ -19,10 +19,10 @@ const Dialog: React.FC<{
   return (
     <div className="fixed left-0 top-0 h-full w-full bg-white">
       <div
-        style={{
-          height,
-          width,
-        }}
+        // style={{
+        //   height,
+        //   width,
+        // }}
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border border-slate-300 bg-white p-8 shadow-md"
         {...props}
       >
