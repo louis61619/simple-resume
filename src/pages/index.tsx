@@ -45,15 +45,12 @@ const Home: NextPage<PageProps> = ({ providers }) => {
         <meta name="description" content="create resume by markdown" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div id="root"></div>
       <main className="flex flex-col p-3">
-        <ResumeContextProvider>
-          <Tools
-            openSignInDialog={() => setShowAuthDialog(true)}
-            className="mb-1 flex"
-          />
-          <Editor className="flex flex-1" />
-        </ResumeContextProvider>
+        <Tools
+          openSignInDialog={() => setShowAuthDialog(true)}
+          className="mb-1 flex"
+        />
+        <Editor className="flex flex-1" />
       </main>
       <Dialog
         open={showAuthDialog}

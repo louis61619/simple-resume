@@ -83,7 +83,6 @@ const Editor: React.FC<
 > = ({ ...props }) => {
   const { content, dispatch } = useResume();
 
-  /* @refresh reset */
   const html = useMemo(() => {
     return marked.parse(content);
   }, [content]);

@@ -43,7 +43,15 @@ const AuthButton: React.FC<AuthButtonProps> = ({ onClick, ...props }) => {
 
 const Tools: React.FC<ToolProps> = ({ openSignInDialog, ...props }) => {
   const { data: sessionData } = useSession();
-  const { fileId, content, fileName, dispatch, saveResume } = useResume();
+  const {
+    fileId,
+    content,
+    fileName,
+    isPublish,
+    dispatch,
+    saveResume,
+    unpublishResume,
+  } = useResume();
 
   useEffect(() => {
     if (sessionData?.error === "RefreshAccessTokenError") {
@@ -77,8 +85,20 @@ const Tools: React.FC<ToolProps> = ({ openSignInDialog, ...props }) => {
 
         <Button>print</Button>
         <AuthButton onClick={() => saveResume()}>save</AuthButton>
-        <AuthButton onClick={() => {}}>publish</AuthButton>
-        <AuthButton>get public url</AuthButton>
+        {isPublish ? (
+          <>
+            <AuthButton
+              onClick={() => {
+                unpublishResume();
+              }}
+            >
+              unpublish
+            </AuthButton>
+            <AuthButton>get public url</AuthButton>
+          </>
+        ) : (
+          <AuthButton onClick={() => {}}>publish</AuthButton>
+        )}
         <AuthButton>open resume</AuthButton>
         <AuthButton>new resume</AuthButton>
         {sessionData?.user && (

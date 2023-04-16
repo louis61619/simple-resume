@@ -39,17 +39,12 @@ export function createPicker(
   picker.setVisible(true);
 }
 
-export async function newResume(
-  accessToken: string,
-  filename: string,
-  content: string
-) {
+export async function newResume(filename: string, content: string) {
   const fileMetadata = {
     name: filename + ".md",
   };
   const file = await gapi.client.drive.files.create({
     resource: fileMetadata,
-    oauth_token: accessToken,
     // media: media,
     fields: "id",
   });
@@ -62,9 +57,6 @@ export async function newResume(
       path: driveUploadPath + "/" + fileId,
       method: "PATCH",
       params: { uploadType: "media", fields: "id" },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
       body: content,
     });
 
@@ -72,16 +64,11 @@ export async function newResume(
   }
 }
 
-async function renameFile(
-  driveId: string,
-  newName: string,
-  accessToken: string
-) {
+async function renameFile(driveId: string, newName: string) {
   const params: any = {
     fileId: driveId,
     name: newName,
     fields: "id",
-    oauth_token: accessToken,
   };
 
   return new Promise((resolve, reject) => {
@@ -92,7 +79,6 @@ async function renameFile(
 }
 
 export async function saveResume(
-  accessToken: string,
   filename: string,
   content: string,
   fileId: string
@@ -102,10 +88,67 @@ export async function saveResume(
     method: "PATCH",
     params: { uploadType: "media", fields: "id" },
     body: content,
-    headers: {
-      Authorization: "Bearer " + accessToken,
+  });
+  const promise2 = renameFile(fileId, filename);
+  return Promise.all([promise1, promise2]);
+}
+
+export function checkIsPublish(fileInfo: gapi.client.drive.File) {
+  if (
+    fileInfo.permissions?.length &&
+    fileInfo.permissions.find((x) => x.id === "anyoneWithLink")
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export async function getFileDescription(
+  fileId: string
+): Promise<gapi.client.drive.File> {
+  return new Promise((resolve) => {
+    gapi.client.drive.files
+      .get({
+        fileId: fileId,
+        fields: "id,version,name,appProperties,permissions",
+        // oauth_token: accessToken,
+      })
+      .execute((response) => {
+        resolve(response.result);
+      });
+  });
+}
+
+export async function getFileConent(fileId: string) {
+  const res = await gapi.client.drive.files.get({
+    fileId: fileId,
+    // oauth_token: accessToken,
+    // fields: "*",
+    alt: "media",
+  });
+
+  return res.body;
+}
+
+export async function publishResume(fileId: string) {
+  return gapi.client.request({
+    path:
+      "https://www.googleapis.com/drive/v3/files/" + fileId + "/permissions",
+    method: "POST",
+    body: {
+      role: "reader",
+      type: "anyone",
     },
   });
-  const promise2 = renameFile(fileId, filename, accessToken);
-  return Promise.all([promise1, promise2]);
+}
+
+export async function unpublishResume(fileId: string) {
+  return gapi.client.request({
+    path:
+      "https://www.googleapis.com/drive/v3/files/" +
+      fileId +
+      "/permissions/anyoneWithLink",
+    method: "delete",
+  });
 }
