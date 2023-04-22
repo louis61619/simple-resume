@@ -115,6 +115,8 @@ export const ResumeContextProvider: React.FC<{
     setGapiInit(true);
   }
 
+  console.log(state);
+
   useEffect(() => {
     if (gapiInit && loading) {
       if (sessionData?.accessToken && fileId) {
@@ -134,6 +136,7 @@ export const ResumeContextProvider: React.FC<{
               type: "SET_IS_PUBLISH",
               payload: checkIsPublish(descriptionResult),
             });
+
             dispatch({
               type: "SET_CONTENT",
               payload: contentResult,
