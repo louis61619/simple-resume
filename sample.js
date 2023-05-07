@@ -1,55 +1,56 @@
-const sample = `->![aa3733d8f8f411ebb81cb27ada609f87.jpg](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIuV62_Mtky1qWoIxBXiUsIfwTAMD4a2FUUg&usqp=CAU)
-# **Kate Miller**
-An engineering manager building and leading engineering teams at Apple Inc
+const sample = `
+# 簡歷
 
-## Work Experience
+## 個人資料
 
-### Apple Inc
-->_Copenhagen_
+- 姓名：王小明
+- 性別：男
+- 出生年月：1990年1月
+- 手機：0912-345-678
+- 電子郵件：xiaoming.wang@email.com
 
-**Engineering Manager**
-->_Jan 2019 to Present_
+## 技能
 
-- Increased engineering staff's operating efficiency by providing structure, operating procedures, engineering tools, guidelines, and handbooks.
-- Contributed to company-wide engineering initiatives
-- Supported the engineering and product teams to achieve a high level of technical quality, reliability, and ease-of-use.
+- 熟悉 JavaScript、Angular 和 Node.js
+- 熟悉 Python 和 Django
+- 具備良好的團隊合作和溝通能力
 
-**Backend Engineer, Financial Data**
-->_April 2018 to December 2018_
+## 教育背景
 
-- Built large-scale (petabyte-size) financial data platform/solution/pipelines using Big Data technologies
-- Worked cross-functionally with many teams: Engineering, Treasury, Finance, Accounting, etc.
-- Worked on systems critical to future operation, with impact over billions of dollars of payments volume.
-- Developed a deep understanding of modern payments and financial technology across many countries.
+### 大學
+-> 2010年9月-2014年7月
 
-### Stripe
-->_San Francisco, CA_
-
-**Full Stack Engineer**
--> _September 2016 to March 2018_
-
-- Responsible for developing, maintaining internal web applications
-- Collaborated with technical and business staff in design, development, testing and implementation
-- Set up, managed and monitored systems to ensure business continuity
-
-### Bloomberg
-->_New York, NY_
-
-**Software Engineer Intern**
-->_June 2016 to August 2016_
-
-- Worked on Bloomberg's platform to enhance the user experience
-- Proactively participated in the team's weekly meetings and conducted reports on the project's progress
+- 學校：國立台灣大學
+- 科系：資訊工程學系
+- 學位：學士學位
 
 
-## Education
+### 研究所
+-> 2014年9月-2016年7月
 
-### Carnegie Mellon University
-->_2014-2016_
-**Masters of Computer Science**, _Pittsburgh, Pennsylvania_
+- 學校：國立清華大學
+- 科系：資訊工程研究所
+- 學位：碩士學位
 
-### The State University of NY
-->_2010 - 2014_
-**Bachelor of Engineering**,  _Oswego, New York_
 
-`;
+## 工作經驗
+
+### ABC 公司 
+-> 2016年8月-至今
+
+#### 職稱：軟體工程師
+
+- 負責開發和維護公司的網路應用程式
+- 使用 Angular 和 Node.js 技術堆疊
+- 參與團隊的敏捷式開發流程
+
+### XYZ 公司 
+-> 2014年8月-2016年7月)
+
+#### 職稱：實習生
+
+- 協助開發和維護公司的應用程式
+- 學習並掌握 Python 和 Django 等技術
+
+
+`

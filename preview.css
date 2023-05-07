@@ -121,10 +121,12 @@ hr {
 .row.row--section {
   overflow: scroll;
   height: 100%;
+  width: 100%;
 }
 .row.row--section .column.column--1-1 {
   flex: 50%;
   padding-right: 2rem;
+  padding-bottom: 4rem;
 }
 .row.row--section .column.column--1-1 > *:first-child {
   margin: 0;
