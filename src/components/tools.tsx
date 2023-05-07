@@ -5,8 +5,9 @@ import {
   getProviders,
   signOut,
 } from "next-auth/react";
-import { Button } from "./button";
+import { Button, type ButtonProps } from "./button";
 import { useResume } from "~/hook/useResume";
+import { createPicker, publishResume } from "~/utils/picker";
 
 type ToolProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -15,15 +16,15 @@ type ToolProps = React.DetailedHTMLProps<
   openSignInDialog: () => void;
 };
 
-type ButtonProps = React.ComponentProps<typeof Button>;
-type AuthButtonProps = ButtonProps;
+// type ButtonProps = React.ComponentProps<typeof Button>;
+// type AuthButtonProps = ButtonProps;
 const ToolsContext = React.createContext<{
   openSignInDialog: (() => void) | null;
 }>({
   openSignInDialog: null,
 });
 
-const AuthButton: React.FC<AuthButtonProps> = ({ onClick, ...props }) => {
+const AuthButton: React.FC<ButtonProps> = ({ onClick, ...props }) => {
   const { data: sessionData } = useSession();
   const { openSignInDialog } = useContext(ToolsContext);
 
@@ -51,6 +52,8 @@ const Tools: React.FC<ToolProps> = ({ openSignInDialog, ...props }) => {
     dispatch,
     saveResume,
     unpublishResume,
+    openResume,
+    publishResume,
   } = useResume();
 
   useEffect(() => {
@@ -87,19 +90,13 @@ const Tools: React.FC<ToolProps> = ({ openSignInDialog, ...props }) => {
         <AuthButton onClick={() => saveResume()}>save</AuthButton>
         {isPublish ? (
           <>
-            <AuthButton
-              onClick={() => {
-                unpublishResume();
-              }}
-            >
-              unpublish
-            </AuthButton>
+            <AuthButton onClick={() => unpublishResume()}>unpublish</AuthButton>
             <AuthButton>get public url</AuthButton>
           </>
         ) : (
-          <AuthButton onClick={() => {}}>publish</AuthButton>
+          <AuthButton onClick={() => publishResume()}>publish</AuthButton>
         )}
-        <AuthButton>open resume</AuthButton>
+        <AuthButton onClick={() => openResume()}>open resume</AuthButton>
         <AuthButton>new resume</AuthButton>
         {sessionData?.user && (
           <Button onClick={() => signOut()}>sign out</Button>

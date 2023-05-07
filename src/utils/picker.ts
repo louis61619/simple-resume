@@ -7,7 +7,7 @@ const APP_ID = env.NEXT_PUBLIC_GOOGLE_APP_ID;
 
 export function createPicker(
   accessToken: string,
-  cb: () => void = () => {
+  cb: (responseObject: google.picker.ResponseObject) => void = () => {
     return;
   }
 ) {

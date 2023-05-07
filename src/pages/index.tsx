@@ -92,8 +92,6 @@ const AuthShowcase: React.FC = () => {
     }
   }, [sessionData]);
 
-  console.log(sessionData);
-
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <button

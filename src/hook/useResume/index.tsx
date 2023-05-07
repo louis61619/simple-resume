@@ -14,7 +14,9 @@ import {
   getFileDescription,
   newResume,
   saveResume,
+  publishResume,
   unpublishResume,
+  createPicker,
 } from "~/utils/picker";
 import Script from "next/script";
 import { Loading } from "~/components/loading";
@@ -29,12 +31,14 @@ const initValue: StateType = {
   isPublish: false,
 };
 
+type DispatchType = React.Dispatch<{
+  type: keyof PayloadType;
+  payload: string | boolean;
+}>;
+
 export const ResumeContext = React.createContext<{
   state: StateType;
-  dispatch: React.Dispatch<{
-    type: ActionType;
-    payload: PayloadType[ActionType];
-  }>;
+  dispatch: DispatchType;
 }>({
   state: initValue,
   dispatch: () => {
@@ -42,9 +46,39 @@ export const ResumeContext = React.createContext<{
   },
 });
 
+function useGetFileInfo(dispatch: DispatchType) {
+  const getFileInfo = async (fileId: string) => {
+    if (!fileId) return;
+    return await Promise.all([
+      getFileDescription(fileId),
+      getFileConent(fileId),
+    ]).then((res) => {
+      // console.log(res);
+      const descriptionResult = res[0];
+      const contentResult = res[1];
+      dispatch({
+        type: "SET_FILE_NAME",
+        payload: descriptionResult.name || "",
+      });
+      dispatch({
+        type: "SET_IS_PUBLISH",
+        payload: checkIsPublish(descriptionResult),
+      });
+      dispatch({
+        type: "SET_CONTENT",
+        payload: contentResult,
+      });
+      return descriptionResult;
+    });
+  };
+  return getFileInfo;
+}
+
 export function useResume() {
   const { state, dispatch } = useContext(ResumeContext);
   const { fileId, fileName, content } = state;
+  const { data: sessionData } = useSession();
+  const getFileInfo = useGetFileInfo(dispatch);
 
   const _saveResume = async () => {
     if (fileId) {
@@ -71,11 +105,47 @@ export function useResume() {
   const _unpublishResume = async () => {
     if (fileId) {
       try {
-        await unpublishResume(fileId);
-        Alert.info("success");
+        const res = await unpublishResume(fileId);
+        console.log(res);
+        if (res.status === 204) {
+          dispatch({
+            type: "SET_IS_PUBLISH",
+            payload: false,
+          });
+          Alert.info("success");
+        }
       } catch (error) {
         Alert.info("error");
       }
+    }
+  };
+
+  const openResume = async () => {
+    if (!sessionData?.accessToken) return;
+    createPicker(sessionData.accessToken, (data) => {
+      if (data.action === google.picker.Action.PICKED) {
+        const document = data[google.picker.Response.DOCUMENTS][0];
+        const fileId = document?.[google.picker.Document.ID];
+        // console.log(fileId);
+        if (fileId) {
+          getFileInfo(fileId);
+        }
+      }
+    });
+  };
+
+  const _publishResume = async () => {
+    if (fileId) {
+      publishResume(fileId).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          dispatch({
+            type: "SET_IS_PUBLISH",
+            payload: true,
+          });
+          Alert.info("success");
+        }
+      });
     }
   };
 
@@ -84,6 +154,9 @@ export function useResume() {
     dispatch,
     saveResume: _saveResume,
     unpublishResume: _unpublishResume,
+    getFileInfo,
+    openResume,
+    publishResume: _publishResume,
   };
 }
 
@@ -100,6 +173,7 @@ export const ResumeContextProvider: React.FC<{
   });
   const [loading, setLoading] = useState(true);
   const { data: sessionData } = useSession();
+  const getFileInfo = useGetFileInfo(dispatch);
 
   const { fileId } = state;
 
@@ -118,37 +192,20 @@ export const ResumeContextProvider: React.FC<{
   console.log(state);
 
   useEffect(() => {
+    console.log("load file info");
     if (gapiInit && loading) {
       if (sessionData?.accessToken && fileId) {
         gapi.client.setToken({
           access_token: sessionData.accessToken,
         });
-        Promise.all([getFileDescription(fileId), getFileConent(fileId)]).then(
-          (res) => {
-            // console.log(res);
-            const descriptionResult = res[0];
-            const contentResult = res[1];
-            dispatch({
-              type: "SET_FILE_NAME",
-              payload: descriptionResult.name || "",
-            });
-            dispatch({
-              type: "SET_IS_PUBLISH",
-              payload: checkIsPublish(descriptionResult),
-            });
-
-            dispatch({
-              type: "SET_CONTENT",
-              payload: contentResult,
-            });
-            setLoading(false);
-          }
-        );
+        getFileInfo(fileId).then(() => {
+          setLoading(false);
+        });
       } else {
         setLoading(false);
       }
     }
-  }, [gapiInit, fileId, loading, sessionData]);
+  }, [gapiInit, fileId, loading, sessionData, getFileInfo]);
 
   return (
     // <SessionProvider session={session} {...props}>
