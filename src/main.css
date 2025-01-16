@@ -15,8 +15,8 @@ body {
   padding: 12px;
   height: 100%;
   max-width: 1200px;
+  min-width: 1000px;
   margin: 0 auto;
-
 }
 .content {
   display: flex;

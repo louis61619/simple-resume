@@ -12,6 +12,12 @@
       max-width: 620px;
       padding: 24px;
       margin: 0 auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    }
+    .text-preview::-webkit-scrollbar { /* WebKit */
+      width: 0;
+      height: 0;
     }
   </style>
 </head>
