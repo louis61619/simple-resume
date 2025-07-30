@@ -36,12 +36,8 @@
     
     const params = new URLSearchParams(window.location.search);
     const fileId = params.get("fileId")
-    console.log(fileId)
 
     const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`
-
-    const obj = {}
-    const { aaa, bbb } = obj
 
     fetch(url).then(res => {
       // return res.json()
